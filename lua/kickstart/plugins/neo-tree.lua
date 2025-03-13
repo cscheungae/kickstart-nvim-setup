@@ -20,6 +20,21 @@ return {
           ['\\'] = 'close_window',
         },
       },
+      filtered_items = {
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = false,
+      },
+      follow_current_file = {
+        enabled = true,
+      },
     },
+    config = function()
+      vim.api.nvim_create_autocmd('VimEnter', {
+        callback = function()
+          vim.cmd 'Neotree reveal'
+        end,
+      })
+    end,
   },
 }
