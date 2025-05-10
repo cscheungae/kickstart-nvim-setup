@@ -166,6 +166,25 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Custom: goto definition in new tab
+vim.keymap.set('n', '<leader>gd', function()
+  local params = vim.lsp.util.make_position_params()
+  vim.lsp.buf_request(0, 'textDocument/definition', params, function(_, result, ctx, _)
+    if result == nil or vim.tbl_isempty(result) then
+      print 'No definition found'
+      return
+    end
+    local def = result[1]
+    local uri = def.uri or def.targetUri
+    local range = def.range or def.targetSelectionRange
+    local fname = vim.uri_to_fname(uri)
+    vim.cmd('tabnew ' .. fname)
+    local bufnr = vim.fn.bufnr(fname)
+    vim.api.nvim_win_set_buf(0, bufnr)
+    vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+  end)
+end, { desc = 'Go to definition in new tab' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -1005,7 +1024,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
