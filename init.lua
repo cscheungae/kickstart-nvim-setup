@@ -186,7 +186,7 @@ vim.keymap.set('n', '<leader>gd', function()
 end, { desc = 'Go to definition in new tab' })
 
 -- Custom: goto usage
-vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, { desc = 'Go to references/usages' })
+vim.keymap.set('n', '<leader>gr', '<cmd>Telescope lsp_references<cr>', { desc = 'Goto References (Telescope)' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
