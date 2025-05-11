@@ -826,6 +826,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lsp-signature-help',
+      { 'hrsh7th/cmp-buffer' },
     },
     config = function()
       -- See `:help cmp`
@@ -900,6 +901,7 @@ require('lazy').setup({
             group_index = 0,
           },
           { name = 'nvim_lsp' },
+          { name = 'buffer' },
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
