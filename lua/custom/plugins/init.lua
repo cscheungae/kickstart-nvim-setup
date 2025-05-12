@@ -24,4 +24,8 @@ return {
     end,
     ft = { 'markdown' },
   },
+  {
+    'numToStr/Comment.nvim',
+    opts = {},
+  },
 }
