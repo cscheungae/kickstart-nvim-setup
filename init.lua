@@ -740,12 +740,22 @@ require('lazy').setup({
         automatic_installation = false,
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            -- For work laptop, use global rubocop (1.53.0+) which provides --lsp, unlike 1.46.0 used for vscode
+            if server_name == 'rubocop' then
+              require('lspconfig').rubocop.setup {
+                cmd = { '/home/billy/.rvm/gems/ruby-3.3.7/bin/rubocop', '--lsp' }, -- Use global Rubocop with LSP support
+                capabilities = capabilities,
+              }
+            elseif server_name == 'ruby_lsp' then -- For work laptop, avoid auto install ruby_lsp which required indexing every time
+              return
+            else
+              local server = servers[server_name] or {}
+              -- This handles overriding only values explicitly passed
+              -- by the server configuration above. Useful when disabling
+              -- certain features of an LSP (for example, turning off formatting for ts_ls)
+              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+              require('lspconfig')[server_name].setup(server)
+            end
           end,
         },
       }
